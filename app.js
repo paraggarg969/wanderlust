@@ -10,12 +10,13 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
-
+require('dotenv').config()
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.MONGO_URL;
 
 main()
   .then(() => {
@@ -37,7 +38,8 @@ app.engine('ejs',ejsmate);
 app.use(express.static(path.join(__dirname,"/public")));
 
 const sessionOptions = {
-  secret: "mysupersecretcode",
+  // secret: "mysupersecretcode",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie:{
@@ -84,6 +86,8 @@ app.use((err, req, res, next)=>{
   // res.status(statusCode).send(message);
 });
 
-app.listen(8080, () => {
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
   console.log("server is listening to port 8080");
 });
